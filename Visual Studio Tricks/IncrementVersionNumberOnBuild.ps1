@@ -1,7 +1,7 @@
 <# 
 	Use by placing this file in the same folder the .csproj file is in and adding
 
-	PowerShell -ExecutionPolicy Bypass -NoProfile -File PostBuildEvents.ps1
+	PowerShell -ExecutionPolicy Bypass -NoProfile -File IncrementVersionNumberOnBild.ps1
 
 	to pre or post build events in VS, whatever suits better.
 
@@ -11,10 +11,11 @@
 
 	Minor and Major still have to be set manually
 
+	Don't forget to replace the name of the project in the $path variable with your own!
 	Use and modify to your wishes
 #>
 
-$path = "[NAME-OF-PROJECT].csproj"
+$path = "##NAME-OF-PROJECT##.csproj"
 
 $xml = [xml](Get-Content $path)
 
