@@ -1,7 +1,7 @@
 <# 
 	Use by placing this file in the same folder the .csproj file is in and adding
 
-	PowerShell -ExecutionPolicy Bypass -NoProfile -File IncrementVersionNumberOnBild.ps1
+	PowerShell -ExecutionPolicy Bypass -NoProfile -File IncrementVersionOnBild.ps1
 
 	to pre or post build events in VS, whatever suits better.
 
@@ -19,11 +19,11 @@ $path = "##NAME-OF-PROJECT##.csproj"
 
 $xml = [xml](Get-Content $path)
 
-$currentVersion = [version]$xml.Project.PropertyGroup.Version
+$currentVersion = [version]($xml.Project.PropertyGroup | Select-Object -First 1).Version
 $year = Get-Date -Format "yy"
 $dayOfYear = (Get-Date).DayOfYear
 $build = [int]$currentVersion.Build
 $rev = "{0:d2}{1:d3}" -f [int]$year, [int]$dayOfYear
-$xml.Project.PropertyGroup.Version = "{0}.{1}.{2}.{3}" -f $currentVersion.Major, $currentVersion.Minor, [int]($build+1), $rev
+($xml.Project.PropertyGroup | Select-Object -First 1).Version = "{0}.{1}.{2}.{3}" -f $currentVersion.Major, $currentVersion.Minor, [int]($build+1), $rev
 
 $xml.Save($path)
